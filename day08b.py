@@ -1,5 +1,5 @@
-x_len, y_len = 25, 6
-n_layer_pixels = x_len * y_len
+width, height = 25, 6
+n_layer_pixels = width * height
 with open('day08.txt') as input_file:
     input_string = input_file.readline()
 pixel_values = list(map(int, list(input_string)))
