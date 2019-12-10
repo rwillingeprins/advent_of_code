@@ -14,37 +14,84 @@ class Amplifier:
 
 
 class IntcodeComputer:
-    parameter_types_per_opcode = {
-        1: [False, False, True],
-        2: [False, False, True],
-        3: [True],
-        4: [False],
-        5: [False, False],
-        6: [False, False],
-        7: [False, False, True],
-        8: [False, False, True]
-    }
-
-    def __init__(self, intcode, phase):
+    def __init__(self, intcode):
         self.intcode = intcode
+        self.instruction_pointer = 0
 
-    def get_parameters(self):
-        n_parameters = len(parameter_types)
-        parameters = []
-        for i in range(n_parameters):
-            modes_code, mode = divmod(modes_code, 10)
-            parameter = intcode[instruction_pointer + 1 + i]
-            is_write_parameter = parameter_types[i]
-            if mode == 1 or is_write_parameter:
-                parameters.append(parameter)
-            else:
-                parameters.append(intcode[parameter])
+    @property
+    def instruction(self):
+        return self.intcode[self.instruction_pointer]
 
-    def add(self, a, b, output_address):
-        self.intcode[output_address] = a+b
+    @property
+    def opcode(self):
+        return self.instruction % 100
 
-    def multiply(self, a, b, output_address):
-        self.intcode[output_address] = a*b
+    @property
+    def operation(self):
+        operation_per_code = {
+            1: self.add,
+            2: self.multiply,
+            3: self.save,
+            4: self.output,
+            5: self.jump_if_true,
+            6: self.jump_if_false,
+            7: self.less_than,
+            8: self.equals,
+            99: self.halt
+        }
+        return operation_per_code.get(self.opcode, self.halt)
+
+    def parameter_mode(self, parameter_number):
+        return (self.instruction // (10 * (10 ** parameter_number * 10))) % 10
+
+    def immediate_parameter(self, parameter_number):
+        parameter_address = self.instruction_pointer + parameter_number
+        return self.intcode[parameter_address]
+
+    def position_parameter(self, parameter_number):
+        parameter_position = self.immediate_parameter(parameter_number)
+        return self.immediate_parameter(parameter_position)
+
+    def parameter(self, number):
+        mode = self.parameter_mode(number)
+        if mode == 0:
+            return self.position_parameter(number)
+        elif mode == 1:
+            return self.immediate_parameter(number)
+
+    def add(self):
+        self.intcode[self.immediate_parameter(3)] = self.parameter(1) + self.parameter(2)
+        self.instruction_pointer += 4
+
+    def multiply(self):
+        self.intcode[self.immediate_parameter(3)] = self.parameter(1) * self.parameter(2)
+        self.instruction_pointer += 4
+
+    def save(self):
+        self.intcode[self.immediate_parameter(1)] = int(input())
+        self.instruction_pointer += 2
+
+    def output(self):
+        return self.parameter(1)
+
+    def jump_if_true(self):
+        if self.parameter(1):
+            self.instruction_pointer = self.parameter(2)
+
+    def jump_if_false(self):
+        if not self.parameter(1):
+            self.instruction_pointer = self.parameter(2)
+
+    def less_than(self):
+        self.intcode[self.immediate_parameter(3)] = int(self.parameter(1) < self.parameter(2))
+        self.instruction_pointer += 4
+
+    def equals(self):
+        self.intcode[self.immediate_parameter(3)] = int(self.parameter(1) == self.parameter(2))
+        self.instruction_pointer += 4
+
+    def halt(self):
+        return
 
     def run_intcode(self, intcode, inputs):
         instruction_pointer = 0
