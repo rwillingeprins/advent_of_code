@@ -16,82 +16,58 @@ class IntcodeProgram:
         return (self.instruction // (10 ** (parameter_number + 1))) % 10
 
     def immediate_parameter(self, parameter_number):
-        parameter_address = self.instruction_pointer + parameter_number
-        return self.intcode[parameter_address]
+        parameter_position = self.instruction_pointer + parameter_number
+        return self.intcode[parameter_position]
 
     def position_parameter(self, parameter_number):
         parameter_position = self.immediate_parameter(parameter_number)
-        return self.immediate_parameter(parameter_position)
+        return self.intcode[parameter_position]
 
     def parameter(self, number):
         mode = self.parameter_mode(number)
         if mode == 0:
             return self.position_parameter(number)
         elif mode == 1:
-            return self.immediate_parameter(number)#
+            return self.immediate_parameter(number)
 
-    def write_to_parameter(self, parameter_number, value):
+    def parameter_write(self, parameter_number, value):
         self.intcode[self.immediate_parameter(parameter_number)] = value
-
-    def add(self):
-        value = self.parameter(1) + self.parameter(2)
-        self.write_to_parameter(3, value)
-        self.instruction_pointer += 4
-
-    def multiply(self):
-        value = self.parameter(1) * self.parameter(2)
-        self.write_to_parameter(3, value)
-        self.instruction_pointer += 4
-
-    def save_input(self):
-        if self.input_list:
-            value = self.input_list.pop(0)
-        else:
-            value = int(input())
-        self.write_to_parameter(1, value)
-        self.instruction_pointer += 2
-
-    def output(self):
-        value = self.parameter(1)
-        self.instruction_pointer += 2
-        return value
-
-    def jump_if_true(self):
-        if self.parameter(1):
-            self.instruction_pointer = self.parameter(2)
-
-    def jump_if_false(self):
-        if not self.parameter(1):
-            self.instruction_pointer = self.parameter(2)
-
-    def less_than(self):
-        value = int(self.parameter(1) < self.parameter(2))
-        self.write_to_parameter(3, value)
-        self.instruction_pointer += 4
-
-    def equals(self):
-        value = int(self.parameter(1) == self.parameter(2))
-        self.write_to_parameter(3, value)
-        self.instruction_pointer += 4
 
     def run(self):
         while self.instruction_pointer < len(self.intcode):
             if self.opcode == 1:
-                self.add()
+                value = self.parameter(1) + self.parameter(2)
+                self.parameter_write(3, value)
+                self.instruction_pointer += 4
             elif self.opcode == 2:
-                self.multiply()
+                value = self.parameter(1) * self.parameter(2)
+                self.parameter_write(3, value)
+                self.instruction_pointer += 4
             elif self.opcode == 3:
-                self.save_input()
+                if self.input_list:
+                    value = self.input_list.pop(0)
+                else:
+                    value = int(input())
+                self.parameter_write(1, value)
+                self.instruction_pointer += 2
             elif self.opcode == 4:
-                return self.output()
+                value = self.parameter(1)
+                self.instruction_pointer += 2
+                return value
             elif self.opcode == 5:
-                self.jump_if_true()
+                if self.parameter(1):
+                    self.instruction_pointer = self.parameter(2)
             elif self.opcode == 6:
-                self.jump_if_false()
+                if not self.parameter(1):
+                    self.instruction_pointer = self.parameter(2)
             elif self.opcode == 7:
-                self.less_than()
+                value = int(self.parameter(1) < self.parameter(2))
+                self.parameter_write(3, value)
+                self.instruction_pointer += 4
             elif self.opcode == 8:
-                self.equals()
+                value = int(self.parameter(1) == self.parameter(2))
+                self.parameter_write(3, value)
+                self.instruction_pointer += 4
             else:
                 break
 
@@ -132,7 +108,7 @@ def run_amplifier_feedback_loop(amplifier_program, phase_settings):
         output_signal = signal
 
 
-with open('test.txt') as input_file:
+with open('day07.txt') as input_file:
     input_string = input_file.readline()
 input_integers = [int(x) for x in input_string.split(',')]
 phase_settings = [5, 6, 7, 8, 9]
