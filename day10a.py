@@ -1,8 +1,8 @@
-def greatest_common_denominator(larger_integer, smaller_integer):
+def greatest_common_divisor(larger_integer, smaller_integer):
     if smaller_integer == 0:
         return larger_integer
     remainder = larger_integer % smaller_integer
-    return greatest_common_denominator(smaller_integer, remainder)
+    return greatest_common_divisor(smaller_integer, remainder)
 
 
 def integers_between(start, end):
@@ -21,7 +21,7 @@ def points_between(here, there):
     if x_diff or y_diff:
         larger = max(x_diff, y_diff)
         smaller = min(x_diff, y_diff)
-        gcd = greatest_common_denominator(larger, smaller)
+        gcd = greatest_common_divisor(larger, smaller)
         x_factor = x_diff // gcd
         y_factor = y_diff // gcd
         for common_factor in integers_between(0, gcd):
