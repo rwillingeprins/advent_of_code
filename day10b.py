@@ -18,8 +18,6 @@ down = {}
 left = {}
 with open('day10.txt') as input_file:
     lines = input_file.readlines()
-    x_max = len(lines[0])
-    y_max = len(lines)
     for y, line in enumerate(lines):
         relative_y = y - laser_y
         y_distance = abs(relative_y)
