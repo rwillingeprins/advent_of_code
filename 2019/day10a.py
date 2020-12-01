@@ -33,7 +33,7 @@ def points_between(here, there):
 
 
 asteroid_set = set()
-with open('day10.txt') as input_file:
+with open('input/day10.txt') as input_file:
     for y, line in enumerate(input_file):
         for x, character in enumerate(line):
             if character == '#':

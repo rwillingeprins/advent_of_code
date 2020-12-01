@@ -1,6 +1,6 @@
 width, height = 25, 6
 n_layer_pixels = width * height
-with open('day08.txt') as input_file:
+with open('input/day08.txt') as input_file:
     input_string = input_file.readline()
 pixel_values = list(map(int, list(input_string)))
 layers = [pixel_values[i:i + n_layer_pixels] for i in range(0, len(pixel_values), n_layer_pixels)]

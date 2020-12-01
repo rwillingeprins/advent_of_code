@@ -16,7 +16,7 @@ up = {}
 right = {}
 down = {}
 left = {}
-with open('day10.txt') as input_file:
+with open('input/day10.txt') as input_file:
     lines = input_file.readlines()
     for y, line in enumerate(lines):
         relative_y = y - laser_y

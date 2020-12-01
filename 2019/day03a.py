@@ -39,7 +39,7 @@ def find_minimal_manhattan_distance(coordinates_list):
     return minimal_manhattan
 
 
-with open('day03.txt') as input_file:
+with open('input/day03.txt') as input_file:
     first_wire_steps = input_file.readline().split(',')
     second_wire_steps = input_file.readline().split(',')
 wire_intersections = find_wire_intersections([first_wire_steps, second_wire_steps])

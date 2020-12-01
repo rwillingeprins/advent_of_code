@@ -93,7 +93,7 @@ class IntcodeProgram:
                 break
 
 
-with open('day09.txt') as input_file:
+with open('input/day09.txt') as input_file:
     input_string = input_file.readline()
 input_code = [int(x) for x in input_string.split(',')]
 boost_program = IntcodeProgram(input_code, [2])

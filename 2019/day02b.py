@@ -18,7 +18,7 @@ def run_intcode(integers, noun, verb):
     return integers[0]
 
 
-with open('day02.txt') as input_file:
+with open('input/day02.txt') as input_file:
     input_string = input_file.readline()
 input_integers = [int(x) for x in input_string.split(',')]
 for n in range(100):

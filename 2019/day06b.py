@@ -1,5 +1,5 @@
 parent_body_per_satellite = {}
-with open('day06.txt') as input_file:
+with open('input/day06.txt') as input_file:
     for line in input_file.read().splitlines():
         parent_body, satellite = line.split(')')
         parent_body_per_satellite[satellite] = parent_body

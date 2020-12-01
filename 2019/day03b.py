@@ -30,7 +30,7 @@ def find_wire_intersections(wires):
     return fewest_combined_steps
 
 
-with open('day03.txt') as input_file:
+with open('input/day03.txt') as input_file:
     first_wire_steps = input_file.readline().split(',')
     second_wire_steps = input_file.readline().split(',')
 print(find_wire_intersections([first_wire_steps, second_wire_steps]))

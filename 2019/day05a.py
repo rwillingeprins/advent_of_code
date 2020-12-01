@@ -43,7 +43,7 @@ def read_parameter(parameter, intcode):
         return integer
 
 
-with open('day05.txt') as input_file:
+with open('input/day05.txt') as input_file:
     input_string = input_file.readline()
 input_integers = [int(x) for x in input_string.split(',')]
 run_intcode(input_integers)

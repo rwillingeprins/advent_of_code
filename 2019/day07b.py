@@ -108,7 +108,7 @@ def run_amplifier_feedback_loop(amplifier_program, phase_settings):
         output_signal = signal
 
 
-with open('day07.txt') as input_file:
+with open('input/day07.txt') as input_file:
     input_string = input_file.readline()
 input_integers = [int(x) for x in input_string.split(',')]
 phase_settings = [5, 6, 7, 8, 9]

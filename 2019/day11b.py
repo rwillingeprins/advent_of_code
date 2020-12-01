@@ -120,7 +120,7 @@ class Robot:
             self.x -= 1
 
 
-with open('day11.txt') as input_file:
+with open('input/day11.txt') as input_file:
     input_string = input_file.readline()
 input_code = [int(x) for x in input_string.split(',')]
 painting_program = IntcodeProgram(input_code)
