@@ -15,10 +15,7 @@ class Passport:
 
     @classmethod
     def from_string(cls, passport_string):
-        kwargs = {}
-        for key_value_string in passport_string.split():
-            (key, value) = key_value_string.split(':')
-            kwargs[key] = value
+        kwargs = dict(key_value_string.split(':') for key_value_string in passport_string.split())
         return cls(**kwargs)
 
     @classmethod
