@@ -4,10 +4,7 @@ def get_seat_ids_from_file(file_path):
 
 
 def decode_seat_id(boarding_pass):
-    row = int(''.join([str(int(x == 'B')) for x in boarding_pass[:7]]), 2)
-    column = int(''.join([str(int(x == 'R')) for x in boarding_pass[7:10]]), 2)
-    seat_id = 8 * row + column
-    return seat_id
+    return int(''.join([str(int(x == 'B' or x == 'R')) for x in boarding_pass]), 2)
 
 
 def day05a():
