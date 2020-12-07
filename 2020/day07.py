@@ -36,7 +36,7 @@ def day07a():
 
 def day07b():
     recursive_number_per_color = get_recursive_contents_for_color('shiny gold')
-    return sum(n for n in recursive_number_per_color.values())
+    return sum(recursive_number_per_color.values())
 
 
 print(day07a())
