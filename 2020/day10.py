@@ -3,22 +3,6 @@ def parse_ints_from_file(file_path):
         return [int(line.strip()) for line in file]
 
 
-valid_arrangements_from_joltage = {}
-
-
-def get_valid_adapter_arrangements(joltages):
-    joltage, *remaining_joltages = joltages
-    if joltage not in valid_arrangements_from_joltage:
-        if not remaining_joltages:
-            return 1
-        valid_arrangements = 0
-        while remaining_joltages and remaining_joltages[0] - joltage <= 3:
-            valid_arrangements += get_valid_adapter_arrangements(remaining_joltages)
-            remaining_joltages = remaining_joltages[1:]
-        valid_arrangements_from_joltage[joltage] = valid_arrangements
-    return valid_arrangements_from_joltage[joltage]
-
-
 def day10a():
     adapter_joltages = sorted(parse_ints_from_file('input/day10.txt'))
     device_joltage = adapter_joltages[-1] + 3
@@ -37,7 +21,14 @@ def day10b():
     adapter_joltages = sorted(parse_ints_from_file('input/day10.txt'))
     device_joltage = adapter_joltages[-1] + 3
     joltages = [0] + adapter_joltages + [device_joltage]
-    return get_valid_adapter_arrangements(joltages)
+    path_counts = [0] * len(joltages)
+    path_counts[0] = 1
+    for index in range(1, len(joltages)):
+        for preceding_index in range(index - 1, index - 4, -1):
+            if preceding_index < 0 or joltages[preceding_index] < joltages[index] - 3:
+                break
+            path_counts[index] += path_counts[preceding_index]
+    return path_counts[-1]
 
 
 print(day10a())
