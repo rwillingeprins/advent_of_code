@@ -24,11 +24,9 @@ print(sum(heightmap[row][col] + 1 for row, col in low_points))
 
 
 def get_basin_points(row, col):
-    basin_points = {(row, col)}
-    for r, c in get_neighbors(row, col):
-        if heightmap[row][col] < heightmap[r][c] < 9:
-            basin_points |= get_basin_points(r, c)
-    return basin_points
+    return {(row, col)}.union(
+        *[get_basin_points(r, c) for r, c in get_neighbors(row, col) if heightmap[row][col] < heightmap[r][c] < 9]
+    )
 
 
 basin_sizes = sorted([len(get_basin_points(row, col)) for row, col in low_points], reverse=True)
