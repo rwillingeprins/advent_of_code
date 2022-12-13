@@ -2,9 +2,10 @@ import re
 
 
 def monkey_business(rounds=20, relief=3):
-    monkeys = []
     with open('input/day11.txt') as input_file:
         monkey_inputs = input_file.read().split('\n\n')
+    monkeys = []
+    divisor_product = 1
     for monkey_input in monkey_inputs:
         _, items_input, operation_input, test_input, true_input, false_input = monkey_input.splitlines()
         items = [int(item) for item in re.search(r'Starting items: ((?:\d+, )*\d+)', items_input).group(1).split(', ')]
@@ -17,6 +18,7 @@ def monkey_business(rounds=20, relief=3):
             'operation': (operator_string, value_string, divisor, true_monkey, false_monkey),
             'inspected': 0,
         })
+        divisor_product *= divisor
     for _ in range(rounds):
         for monkey in monkeys:
             operator_string, value_string, divisor, true_monkey, false_monkey = monkey['operation']
@@ -28,7 +30,7 @@ def monkey_business(rounds=20, relief=3):
                     worry_level += operation_value
                 elif operator_string == '*':
                     worry_level *= operation_value
-                worry_level %= 9699690
+                worry_level %= divisor_product
                 worry_level //= relief
                 throw_to = true_monkey if not worry_level % divisor else false_monkey
                 monkeys[throw_to]['items'].append(worry_level)
